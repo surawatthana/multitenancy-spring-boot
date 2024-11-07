@@ -2,44 +2,36 @@
 
 ## Overview
 
-Multi Tenancy usually plays an important role in the business case for
-SAAS solutions. Spring Data and Hibernate provide out-of-the-box support
-for different Multi-tenancy strategies. Configuration however becomes more
-complicated, and the available examples are few.
-
-This project complements my blog series on Multi Tenancy
-(see https://callistaenterprise.se/blogg/teknik/2020/09/19/multi-tenancy-with-spring-boot-part1/),
-and contains working examples of different Multi Tenant strategies implemented with
-Spring Boot, Hibemate and Liquibase, complete with support for database
-migrations as well as dynamically set up new tenants on the fly.
+This project demonstrates how to apply a single changeset to multiple schemas in a PostgreSQL database, enabling support
+for multitenancy with a single database and multiple schemas.
 
 ## How to use the examples
 
-The master branch contains a common, minimal example project skeleton. The
-different Multi-tenancy strategy examples are in separate branches.
+### How to Use the Examples
 
-### Database per tenant
+1. Start by running `docker-compose up -d` to launch the Liquibase Docker container.
+2. Next, manually create the desired schemas in the database. You can do this using a tool like pgAdmin or by running a
+   script.
+3. Specify the schemas in the `application.yml` file under `multitenancy.master.datasource.schemas`, for
+   example: `schemas: "tenant1,tenant2,tenant3"`.
 
-The `database` branch implements the *Database per tenant* strategy.
+#### Note: Ensure that the schema names and number of schemas in the database match those listed in multitenancy.master.datasource.schemas.
 
-### Schema per tenant
+4. Now, start the Spring Boot application. Liquibase will apply the changeset to all specified schemas.
 
-The `schema` branch implements the *Schema per tenant* strategy.
+### Updating Schemas
 
-### Shared Database with Discriminator, using Hibernate Filters
+To add or remove schemas, update both the database and the `multitenancy.master.datasource.schemas` section
+in `application.yml`.
 
-The `shared_database_hibernate` branch implements the *Shared Database with Discriminator*
-strategy, using Hibernate's experimental support for discriminator-based multi-tenancy
-(see e.g. https://hibernate.atlassian.net/browse/HHH-6054)
+### Applying Changeset Updates
 
-### Shared Database with Discriminator, using PostgreSQL's Row Level Security
-
-The `shared_database_postgres_rls` branch implements the *Shared Database with Discriminator*
-strategy, using PostgreSQL's Row Level Security.
+If you modify the changeset, simply restart the Spring Boot application, and the changes will be applied to the schemas
+automatically.
 
 ## How to start a Dockerized postgres database
 
-All the examples require a postgres database running at localhost:5432. Run the following command 
+All the examples require a postgres database running at localhost:5432. Run the following command
 to use the provided `docker-compose.yml` configuration to start a dockerized postgres
 container:
 
@@ -52,4 +44,3 @@ Close it down with the following command when done, or if you need to recreate t
 ```
 docker-compose down
 ```
-

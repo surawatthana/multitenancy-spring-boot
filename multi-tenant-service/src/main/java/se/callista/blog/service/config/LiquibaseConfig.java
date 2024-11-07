@@ -1,7 +1,9 @@
 package se.callista.blog.service.config;
 
+import liquibase.exception.LiquibaseException;
 import liquibase.integration.spring.SpringLiquibase;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseDataSource;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -11,11 +13,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 
 import javax.sql.DataSource;
+import java.util.List;
 
 @Lazy(false)
 @Configuration
 @EnableConfigurationProperties(LiquibaseProperties.class)
 public class LiquibaseConfig {
+
+    @Value("${multitenancy.master.datasource.schemas}")
+    private List<String> schemas;
 
     @Bean
     @ConfigurationProperties("multitenancy.master.liquibase")
@@ -42,6 +48,24 @@ public class LiquibaseConfig {
         liquibase.setRollbackFile(liquibaseProperties.getRollbackFile());
         liquibase.setTestRollbackOnUpdate(liquibaseProperties.isTestRollbackOnUpdate());
         return liquibase;
+    }
+
+    @Bean
+    public SpringLiquibase runLiquibasePerSchema(@LiquibaseDataSource ObjectProvider<DataSource> liquibaseDataSource) {
+        SpringLiquibase springLiquibase = this.liquibase(liquibaseDataSource);
+
+        schemas.forEach(schema -> {
+            try {
+                springLiquibase.setDefaultSchema(schema);
+                springLiquibase.afterPropertiesSet();
+            } catch (LiquibaseException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        springLiquibase.setDefaultSchema(masterLiquibaseProperties().getDefaultSchema());
+
+        return springLiquibase;
     }
 
 }
