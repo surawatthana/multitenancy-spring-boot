@@ -14,7 +14,6 @@ multitenancy:
       url: jdbc:postgresql://localhost:5432/blog
       username: postgres
       password: secret
-      schemas: "tenant1,tenant2,tenant3"
     liquibase:
       enabled: true
       changeLog: classpath:db/changelog/db.changelog-tenant.yaml
