@@ -1,0 +1,49 @@
+databaseChangeLog:
+
+- changeSet:
+      id: introducing master data for schema 1
+      author: Sura
+      context: "tenant1"
+      changes:
+          - insert:
+                tableName: product
+                schemaName: tenant1
+                columns:
+                    - column:
+                        name: "id"
+                        valueNumeric: 1
+                    - column:
+                        name: "name"
+                        value: "tenant1"
+
+- changeSet:
+    id: introducing master data for schema 2
+    author: Sura
+    context: "tenant2"
+    changes:
+      - insert:
+          tableName: product
+          schemaName: tenant2
+          columns:
+            - column:
+                name: "id"
+                valueNumeric: 1
+            - column:
+                name: "name"
+                value: "tenant2"
+
+- changeSet:
+    id: introducing master data for schema 3
+    author: Sura
+    context: "tenant3"
+    changes:
+      - insert:
+          tableName: product
+          schemaName: tenant3
+          columns:
+            - column:
+                name: "id"
+                valueNumeric: 1
+            - column:
+                name: "name"
+                value: "tenant3"
