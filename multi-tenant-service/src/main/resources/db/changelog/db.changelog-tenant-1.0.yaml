@@ -1,13 +1,13 @@
 databaseChangeLog:
 
 - changeSet:
-    id: 1
+    id: create product table for tenant1
     author: bjobes
     changes:
     - createSequence:
         sequenceName: product_seq
-        startValue: 100000
-        incrementBy: 50
+        startValue: 1
+        incrementBy: 1
     - createTable:
         tableName: product
         schemaName: "tenant1"
@@ -31,13 +31,13 @@ databaseChangeLog:
               nullable: false
 
 - changeSet:
-    id: 2
+    id: create product table for tenant2
     author: bjobes
     changes:
       - createSequence:
           sequenceName: product_seq
-          startValue: 100000
-          incrementBy: 50
+          startValue: 1
+          incrementBy: 1
       - createTable:
           tableName: product
           schemaName: "tenant2"
@@ -61,13 +61,13 @@ databaseChangeLog:
                   nullable: false
 
 - changeSet:
-    id: 3
+    id: create product table for tenant3
     author: bjobes
     changes:
       - createSequence:
           sequenceName: product_seq
-          startValue: 100000
-          incrementBy: 50
+          startValue: 1
+          incrementBy: 1
       - createTable:
           tableName: product
           schemaName: "tenant3"
@@ -89,51 +89,3 @@ databaseChangeLog:
                 type: VARCHAR(255)
                 constraints:
                   nullable: false
-
-- changeSet:
-    id: 4
-    author: Sura
-    context: "tenant1"
-    changes:
-      - insert:
-          tableName: product
-          schemaName: tenant1
-          columns:
-            - column:
-                name: "id"
-                valueNumeric: 1
-            - column:
-                name: "name"
-                value: "tenant1"
-
-- changeSet:
-    id: 5
-    author: Sura
-    context: "tenant2"
-    changes:
-      - insert:
-          tableName: product
-          schemaName: tenant2
-          columns:
-            - column:
-                name: "id"
-                valueNumeric: 1
-            - column:
-                name: "name"
-                value: "tenant2"
-
-- changeSet:
-    id: 6
-    author: Sura
-    context: "tenant3"
-    changes:
-      - insert:
-          tableName: product
-          schemaName: tenant3
-          columns:
-            - column:
-                name: "id"
-                valueNumeric: 1
-            - column:
-                name: "name"
-                value: "tenant3"
