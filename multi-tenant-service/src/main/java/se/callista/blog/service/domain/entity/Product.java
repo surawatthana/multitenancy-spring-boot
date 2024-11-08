@@ -33,7 +33,7 @@ public class Product {
 
     @Id
     @Column(name = "id", unique = true, nullable = false, updatable = false)
-    @SequenceGenerator(name="product_seq", sequenceName="product_seq", allocationSize=50)
+    @SequenceGenerator(name="product_seq", sequenceName="product_seq", allocationSize=1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="product_seq")
     protected Long id;
 
